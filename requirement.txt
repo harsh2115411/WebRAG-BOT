@@ -1,8 +1,8 @@
 streamlit
 
-# Pin compatible versions
-langchain==0.3.7
-langchain-community==0.3.7
+# Force exact versions from GitHub
+git+https://github.com/langchain-ai/langchain.git@0.3.7
+git+https://github.com/langchain-ai/langchain-community.git@0.3.7
 
 langchain-huggingface
 langchain-groq
