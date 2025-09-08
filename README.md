@@ -1,5 +1,8 @@
 # 🤖 WebRAG Bot - Chat with Web Pages
 
+## 🚀 Live Demo
+Try the live app: [WebRAG Bot on Streamlit Cloud](https://webrag-bot-harsh-pilania.streamlit.app/).
+
 A powerful **Retrieval-Augmented Generation (RAG)** chatbot that allows you to have interactive conversations with any web page content. Built with **Streamlit**, **LangChain**, and **Groq**.
 
 ![WebRAG Bot Demo](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
@@ -17,9 +20,7 @@ A powerful **Retrieval-Augmented Generation (RAG)** chatbot that allows you to h
 - 🎯 **Context-aware** - Maintains conversation history for better responses
 - 📱 **Responsive design** - Works on desktop and mobile devices
 
-## 🚀 Live Demo
 
-Try the live app: [WebRAG Bot on Streamlit Cloud](https://your-app-url.streamlit.app)
 
 ## 🛠️ Tech Stack
 
