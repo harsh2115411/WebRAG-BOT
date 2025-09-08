@@ -1,8 +1,8 @@
 streamlit
 
-# LangChain core + community, install from GitHub so both are compatible
-git+https://github.com/langchain-ai/langchain.git
-git+https://github.com/langchain-ai/langchain-community.git
+# Pin compatible versions
+langchain==0.3.7
+langchain-community==0.3.7
 
 langchain-huggingface
 langchain-groq
