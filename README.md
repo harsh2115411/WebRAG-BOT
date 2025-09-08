@@ -5,6 +5,8 @@ A powerful **Retrieval-Augmented Generation (RAG)** chatbot that allows you to h
 ![WebRAG Bot Demo](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq-000000?style=for-the-badge&logo=groq&logoColor=white)
+![OpenAI](https://img.shields.io/badge/Groq-000000?style=for-the-badge&logo=groq&logoColor=white)
+
 
 ## ✨ Features
 
