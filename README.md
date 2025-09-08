@@ -1,6 +1,6 @@
 # 🤖 WebRAG Bot - Chat with Web Pages
 
-## 🚀 Live Demo: [WebRAG Bot on Streamlit Cloud](https://webrag-bot-harsh-pilania.streamlit.app/).
+## 🚀 Live Demo: [Click Here](https://webrag-bot-harsh-pilania.streamlit.app/).
 
 
 
