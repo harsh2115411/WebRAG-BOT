@@ -1,5 +1,3 @@
-# sec_28_chatbot_streamlit_ui2.py
-
 import streamlit as st
 from langchain_community.document_loaders import WebBaseLoader
 from bs4 import SoupStrainer
@@ -12,24 +10,45 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 
-# ------------------ CACHED DOCUMENT PROCESSING ------------------
 @st.cache_resource(show_spinner=False)
 def load_and_process_url(url: str):
-    only_content = SoupStrainer("p")
-    loader = WebBaseLoader(url, bs_kwargs={"parse_only": only_content})
-    docs = loader.load()
+    try:
+        only_content = SoupStrainer("p")
+        loader = WebBaseLoader(url, bs_kwargs={"parse_only": only_content})
+        docs = loader.load()
+    except Exception as e:
+        st.error(f"❌ Failed to load content from URL: {e}")
+        return None
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=50)
-    document_chunks = text_splitter.split_documents(docs)
+    if not docs:
+        st.error("⚠️ No content could be extracted from the given URL.")
+        return None
 
-    embeddings = OpenAIEmbeddings()
-    db = FAISS.from_documents(document_chunks, embeddings)
+    try:
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=50)
+        document_chunks = text_splitter.split_documents(docs)
+    except Exception as e:
+        st.error(f"❌ Failed while splitting text: {e}")
+        return None
+
+    if not document_chunks:
+        st.error("⚠️ This web page blocks text extraction, Please try a different URL.")
+        return None
+
+    try:
+        embeddings = OpenAIEmbeddings()
+        db = FAISS.from_documents(document_chunks, embeddings)
+    except Exception as e:
+        st.error(f"❌ Failed while creating embeddings/vectorstore: {e}")
+        return None
 
     return db
 
-# ------------------ SETUP CHATBOT ------------------
 def setup_chatbot(url: str):
     db = load_and_process_url(url)
+    if db is None:
+        return None, None
+
     memory = ConversationBufferMemory(return_messages=True)
 
     llm = ChatGroq(
@@ -50,19 +69,16 @@ def setup_chatbot(url: str):
 
     return ret, memory
 
-# ------------------ STREAMLIT APP ------------------
 def main():
     st.set_page_config(page_title="Chatbot", layout="centered", page_icon="💬")
     
     # Header
     st.markdown("<h1 style='text-align:center; color:#4B8BBE;'> WebRAG-Bot -> Chat with WebPages</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align:center; color:#555;'>Enter a URL below and chat with the content!</p>", unsafe_allow_html=True)
-    st.markdown("---")  # separator
+    st.markdown("---")  
 
-    # URL input
     url = st.text_input("Enter a URL to load content:", "")
 
-    # Styling chat bubbles
     st.markdown(
     """
     <style>
@@ -133,8 +149,9 @@ def main():
     </style>
     """,
     unsafe_allow_html=True
-)
-
+    )
+    st.sidebar.title("NOTE:")
+    st.sidebar.info("This application can throw error for some URL due to blocked content extraction or unsupported web structures. If you encounter an error, please try a different URL. For best results, use URLs from well-structured websites with accessible text content.")
 
     st.markdown("<div class='chat-container'>", unsafe_allow_html=True)
 
@@ -142,6 +159,8 @@ def main():
         if "chatbot" not in st.session_state:
             with st.spinner("Processing URL, this may take a few seconds..."):
                 ret, memory = setup_chatbot(url)
+                if ret is None:  # failed case
+                    st.stop()
                 st.session_state.chatbot = ret
                 st.session_state.memory = memory
                 st.session_state.history = []
@@ -164,7 +183,6 @@ def main():
             st.session_state.memory.chat_memory.add_user_message(user_input)
             st.session_state.memory.chat_memory.add_ai_message(bot_response)
 
-        # Display chat history
         for role, message in st.session_state.history:
             if role == "user":
                 st.markdown(f"<div class='user-msg'>{message}</div>", unsafe_allow_html=True)
@@ -172,6 +190,7 @@ def main():
                 st.markdown(f"<div class='bot-msg'>{message}</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     main()
