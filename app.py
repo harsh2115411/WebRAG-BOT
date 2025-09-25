@@ -25,7 +25,7 @@ def load_and_process_url(url: str):
         return None
 
     try:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=50)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=150)
         document_chunks = text_splitter.split_documents(docs)
     except Exception as e:
         st.error(f"❌ Failed while splitting text: {e}")
@@ -194,3 +194,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
